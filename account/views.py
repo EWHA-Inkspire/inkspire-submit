@@ -21,6 +21,3 @@ class CharacterCreate(generics.CreateAPIView):
 class CharacterList(generics.ListAPIView):
     queryset = Character.objects.all()
     serializer_class = CharacterSerializer
-    
-    def perform_create(self, serializer):
-        serializer.save(user = self.request.user)
