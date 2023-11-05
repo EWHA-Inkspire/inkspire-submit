@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,10 +77,19 @@ WSGI_APPLICATION = 'inkspire_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+load_dotenv()
+
+# .env 파일에 설정해 둔 sql pw 받아오기
+PW = os.getenv("MYSQL_PW")
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'inkspire',
+        'USER' : 'gongryong',
+        'PASSWORD' : PW,
+        'HOST' : 'localhost',
+        'PORT' : '3306'
     }
 }
 
