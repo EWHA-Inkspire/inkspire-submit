@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+# 생성한 django 앱과 rest_framework 추가
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'member',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -103,9 +105,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# 언어 한국어로 변경
+LANGUAGE_CODE = 'ko'
 
-TIME_ZONE = 'UTC'
+# 시간
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
