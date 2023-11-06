@@ -57,8 +57,10 @@ class User(AbstractBaseUser):
 class Character(models.Model):
     # character_id : 자동 생성 (PK)
     character_id = models.AutoField(primary_key=True)
+    
     # 외래키 지정 (User - Character -> 1 : N 관계)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column="user_id")
+    
     # 캐릭터 이름
     name = models.CharField(default='', max_length=100, null=False, blank=False)
     # 캐릭터 스탯 : 공격력, 방어력, 체력, 민첩성, 지능
