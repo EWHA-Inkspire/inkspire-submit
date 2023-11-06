@@ -13,6 +13,12 @@ class GoalSerializer(serializers.ModelSerializer):
         model = Goal
         fields = ['goal_id', 'content', 'final', 'finished']
 
+# GPT 정보
+class GptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gpt
+        fields = ['gpt_id', 'role', 'query']
+
 # 스크립트 세부 정보 - 스크립트 내용, 목표 + GPT 대화 내용도?
 class ScriptDetailSerializer(serializers.ModelSerializer):
     # 스크립트가 지닌 목표 정보

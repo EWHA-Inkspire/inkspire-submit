@@ -38,3 +38,25 @@ class Goal(models.Model):
     
     def __str__(self):
         return self.content
+
+# GPT 모델
+class Gpt(models.Model):
+    ROLE_CHOICES = (
+        ('system', 'system'),
+        ('assistant', 'assistant'),
+        ('user', 'user'),
+    )
+        
+    # gpt_id : 자동 생성 (PK)
+    gpt_id = models.BigAutoField(primary_key=True)
+    
+    # 외래키 지정 (Script - Gpt -> 1 : N 관계)
+    script = models.ForeignKey(Script, related_name='gpts', on_delete=models.CASCADE, db_column="script_id")
+    
+    # 역할
+    role = models.CharField(choices=ROLE_CHOICES, max_length=10, null=False, blank=False)
+    # 쿼리
+    query = models.TextField(default='', null=True)
+    
+    def __str__(self):
+        return self.query
