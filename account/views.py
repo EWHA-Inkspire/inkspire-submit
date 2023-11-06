@@ -78,10 +78,3 @@ class CharacterView(views.APIView):
                 'message' : '캐릭터 생성 실패',
                 'data' : serializer.errors
             }, status=HTTP_400_BAD_REQUEST)
-
-# 캐릭터 조회 뷰 (user id로 조회)
-class CharacterListView(views.APIView):
-    serializer_class = CharacterSerializer
-    
-    def get(self, request, pk):
-        serializer = self.serializer_class()
