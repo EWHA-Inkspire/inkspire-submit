@@ -7,15 +7,30 @@ from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
 
+# 권한 확인 함수
+def CheckAuth(request, model_name, pk):
+    user = request.user
+    model = get_object_or_404(model_name, pk=pk)
+    
+    if model_name == Character:
+        return model.user != user
+    else:
+        return model.character.user != user
+
 # 스크립트 생성 뷰 (pk : character_id)
 class ScriptView(views.APIView):
     serilalizer_class = ScriptSerializer
     permission_classes = [IsAuthenticated]
     
     def post(self, request, pk):
-        character = get_object_or_404(Character, pk=pk)
-        serializer = self.serilalizer_class(data=request.data)
+        if CheckAuth(request, Character, pk):
+            return Response({
+                'message' : '스크립트 생성 권한이 없습니다.'
+            }, status=HTTP_400_BAD_REQUEST)
         
+        character = get_object_or_404(Character, pk=pk)    
+        serializer = self.serilalizer_class(data=request.data)
+            
         if serializer.is_valid(raise_exception=True):
             serializer.save(character=character)
             return Response({
@@ -34,9 +49,13 @@ class ScriptListView(views.APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, pk):
-        data = get_object_or_404(Script, pk=pk)
+        if CheckAuth(request, Script, pk):
+            return Response({
+                    'message' : '스크립트 조회 권한이 없습니다.'
+                }, status=HTTP_400_BAD_REQUEST)
         
-        serializer = self.serilalizer_class(data)
+        script = get_object_or_404(Script, pk=pk)
+        serializer = self.serilalizer_class(script)
         
         return Response({
             'message' : '스크립트 상세 조회 성공',
@@ -49,6 +68,11 @@ class GoalListView(views.APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request, pk):
+        if CheckAuth(request, Script, pk):
+            return Response({
+                'message' : '목표 생성 권한이 없습니다.'
+            })
+        
         script = get_object_or_404(Script, pk=pk)
         serializer = self.serilalizer_class(data=request.data)
         
@@ -75,8 +99,12 @@ class GoalDetailView(views.APIView):
         return goal
     
     def get(self, request, pk, goal_pk):
-        goal = self.get_object(pk=goal_pk)
+        if CheckAuth(request, Script, pk):
+            return Response({
+                'message' : '목표 상세 조회 권한이 없습니다.'
+            }, status=HTTP_400_BAD_REQUEST)
         
+        goal = self.get_object(pk=goal_pk)
         serializer = self.serilalizer_class(goal)
         
         return Response({
@@ -85,6 +113,11 @@ class GoalDetailView(views.APIView):
         }, status=HTTP_200_OK)
     
     def patch(self, request, pk, goal_pk):
+        if CheckAuth(request, Script, pk):
+            return Response({
+                'message' : '목표 정보 수정 권한이 없습니다.'
+            }, status=HTTP_400_BAD_REQUEST)
+        
         goal = self.get_object(pk=goal_pk)
         serializer = self.serilalizer_class(data=request.data, instance=goal, partial=True)
         
