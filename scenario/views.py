@@ -43,8 +43,8 @@ class ScriptListView(views.APIView):
             'data' : serializer.data
         }, status=HTTP_200_OK)
 
-# 목표 생성 뷰 (pk : script_id)
-class GoalView(views.APIView):
+# 목표 리스트 뷰 (pk : script_id)
+class GoalListView(views.APIView):
     serilalizer_class = GoalSerializer
     permission_classes = [IsAuthenticated]
     
@@ -61,6 +61,42 @@ class GoalView(views.APIView):
         else:
             return Response({
                 'message' : '목표 생성 실패',
+                'data' : serializer.errors
+            }, status=HTTP_400_BAD_REQUEST)
+
+# 목표 상세 뷰 (pk : script_id, goal_pk : goal_id)
+class GoalDetailView(views.APIView):
+    serilalizer_class = GoalSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self, pk):
+        goal = get_object_or_404(Goal, pk=pk)
+        self.check_object_permissions(self.request, goal.script)
+        return goal
+    
+    def get(self, request, pk, goal_pk):
+        goal = self.get_object(pk=goal_pk)
+        
+        serializer = self.serilalizer_class(goal)
+        
+        return Response({
+            'message' : '목표 상세 조회 성공',
+            'data' : serializer.data
+        }, status=HTTP_200_OK)
+    
+    def patch(self, request, pk, goal_pk):
+        goal = self.get_object(pk=goal_pk)
+        serializer = self.serilalizer_class(data=request.data, instance=goal, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'message' : '목표 정보 수정 성공',
+                'data' : serializer.data
+            }, status=HTTP_200_OK)
+        else:
+            return Response({
+                'message' : '목표 정보 수정 실패',
                 'data' : serializer.errors
             }, status=HTTP_400_BAD_REQUEST)
     

@@ -5,13 +5,13 @@ from rest_framework import serializers
 class ScriptSerializer(serializers.ModelSerializer):
     class Meta:
         model = Script
-        fields = ['background', 'genre', 'town', 'town_detail']
+        fields = ['script_id', 'background', 'genre', 'town', 'town_detail']
 
 # 목표 정보
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
-        fields = ['content', 'final', 'finished']
+        fields = ['goal_id', 'content', 'final', 'finished']
 
 # 스크립트 세부 정보 - 스크립트 내용, 목표 + GPT 대화 내용도?
 class ScriptDetailSerializer(serializers.ModelSerializer):
