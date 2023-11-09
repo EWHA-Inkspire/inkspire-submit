@@ -36,6 +36,7 @@ class LoginSerializer(serializers.Serializer):
                 raise serializers.ValidationError('잘못된 비밀번호입니다.')
             else:
                 data = {
+                    'user_id' : user.user_id,
                     'nickname' : user.nickname,
                     'email' : user.email
                 }
